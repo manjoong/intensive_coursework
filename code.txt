@@ -1,5 +1,8 @@
 ssh -i key0629.pem ubuntu@ip주소
 
+elastickWNTH = 고정 ip
+그냥 vm ip로 쓸 것
+
 
 
 VpcId : vpc-0a275e0094e01d103
