@@ -1,0 +1,51 @@
+ssh -i key0629.pem ubuntu@ip주소
+
+
+
+VpcId : vpc-0a275e0094e01d103
+RouteTableId: rtb-002946cef2f5b2117
+SubnetId: subnet-00e4474609381bf6b
+InternetGatewayId: igw-05c53aa53b1446a82
+SG GroupId: sg-0698ef14927b51be1
+InstanceId: i-08320ab88717dda3b
+"PublicIp": 52.60.103.166
+"AllocationId": eipalloc-032ea2d56cb32ea1d
+"AssociationId": "eipassoc-0a16af139622af0fe"
+
+
+> aws ec2 create-vpc --cidr-block 10.0.0.0/16
+> aws ec2 modify-vpc-attribute --vpc-id vpc-0a275e0094e01d103 --enable-dns-hostnames
+>  aws ec2 describe-vpcs
+
+>  aws ec2 create-subnet --vpc-id vpc-0a275e0094e01d103 --availability-zone ca-central-1a --cidr-block 10.0.0.0/24
+>  aws ec2 describe-subnets
+
+> aws ec2 create-route-table --vpc-id vpc-0a275e0094e01d103
+> aws ec2 associate-route-table --route-table-id  rtb-002946cef2f5b2117 --subnet-id subnet-00e4474609381bf6b
+
+>  aws ec2 create-internet-gateway
+> aws ec2 attach-internet-gateway --internet-gateway-id igw-05c53aa53b1446a82 --vpc-id vpc-0a275e0094e01d103
+
+>  aws ec2 create-route --route-table-id rtb-002946cef2f5b2117 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-05c53aa53b1446a82
+
+> aws ec2 create-key-pair --key-name shKey0629-02 --query 'KeyMaterial' --output text> shkeypair_0629.pem
+
+> aws ec2 create-security-group --group-name shSG02 --description "For my ec2" --vpc-id vpc-0a275e0094e01d103
+
+
+>  curl http://checkip.amazonaws.com
+
+>  aws ec2 authorize-security-group-ingress --group-id sg-0698ef14927b51be1 --pro
+tocol tcp --port 22 --cidr 211.45.60.5/32
+
+>  aws ec2 authorize-security-group-ingress --group-id sg-0698ef14927b51be1 --protocol tcp --port 80 --cidr 0.0.0.0/0
+
+>  aws ec2 describe-security-groups --group-id  sg-0698ef14927b51be1
+
+> aws ec2 run-instances --image-id ami-065ba2b6b298ed80f --count 1 --instance-ty
+pe t2.micro --key-name shKey0629-02 --security-group-ids  sg-0698ef14927b51be1 --subnet-id  subnet-00e4474609381bf6b
+
+
+> aws ec2 allocate-address
+
+>  aws ec2 describe-instances | grep InstanceId
