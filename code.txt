@@ -52,3 +52,51 @@ pe t2.micro --key-name shKey0629-02 --security-group-ids  sg-0698ef14927b51be1 -
 > aws ec2 allocate-address
 
 >  aws ec2 describe-instances | grep InstanceId
+
+aws elb create-load-balancer --load-balancer-name manjoong-lb-02 --listeners Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=80 --subnet subnet-040d704adc1c66457 subnet-040d704adc1
+c66457 --security-groups sg-062aad70a1031304a
+
+
+aws elb register-instances-with-load-balancer --load-balancer-name manjoong-lb-02 --instances i-06e83d185daccbe06 i-0db0f7b9920190f28
+
+
+1. VPC생성
+(vpc-05a30dba05ac631df)
+
+2. vpc enable
+
+3. subnet생성
+(subnet-005c7707c1bea0ef4)
+
+4. 라우트 테이블 생성
+(rtb-04018691ba1f7b6da)
+
+5. 라우트 테이블을 서브넷과 연결
+
+6. 인터넷 게이트웨이 생성
+(igw-0853fdff960eb7ac9)
+
+7. 인터넷 게이트웨이와 VPC를 연결
+
+8. 라우팅 테이블에 인터넷 게이트웨이 라우팅 룰 추가 
+
+9. 키페어 생성
+
+10. 보안그룹생성 	vpc에
+(sg-0f3351e16e162c1d6)
+
+11. 내 ip 확인
+
+12. 보안그룹에 22번, 80번 포트 내 아이피로 인바운드 권한 추가
+
+13. 인스턴스 생성
+(i-0cc85c7023ab828d3)
+
+14. PUBLIC IP 할당( aws ec2 allocate-address)
+(54.251.254.148)
+(eipalloc-050da68ed6add4a79)
+
+
+13. 인스턴스에 PUBLIC IP 연결( aws ec2 associate-address --instance-id i-0cc85c7023ab828d3 --allocation-id eipalloc-050da68ed6add4a79)
+
+
