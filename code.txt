@@ -142,3 +142,34 @@ aws ec2 authorize-security-group-ingress --group-id sg-0f2953eb6a1873f2e --proto
 
 aws ec2 authorize-security-group-ingress --group-id sg-09b282ecbd590ab63 --protocol tcp --port 22 --cidr 0.0.0.0/0
 
+
+ aws ec2 create-security-group --group-name manjoong-sg-ELB --description "For my ELB" --vpc-id vpc-06bb9dce2d799e09f
+
+aws ec2 authorize-security-group-ingress --group-id sg-09b282ecbd590ab63 --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress --group-id sg-09b282ecbd590ab63 --protocol tcp --port 80 --cidr 0.0.0.0/0
+
+aws ec2 run-instances --image-id ami-063e3af9d2cc7fe94 --count 1 --instance-type t2.micro --key-name manjoog_ssh-3 --security-group-ids sg-0f2953eb6a1873f2e --subnet-id subnet-0093b1bf79b438a57 --associate-public-ip-address
+
+
+aws elb create-load-balancer --load-balancer-name manjoong-lb01 --listeners Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=80 --tag Key=NAME,Value=manjoong-lb --subnet subnet-035d5f12020d24c5c subnet-0093b1bf79b438a57 --security-groups sg-09b282ecbd590ab63
+aws ec2 create-image --instance-id i-084c270b6dd4d3356 --name manjoong-bastion-img --description "for bastion image->nginx"
+aws autoscaling create-launch-configuration --launch-configuration-name manjoong-autoconfig --image-id ami-0d6795db73773bf87 --key-name manjoog_ssh-3 --no-ebs-optimized --instance-type t2.micro --instance-monitoring Enabled=true --security-group sg-0f2953eb6a1873f2e --no-associate-public-ip-address
+aws autoscaling create-auto-scaling-group --auto-scaling-group-name manjoong-auto-group --launch-configuration-name manjoong-autoconfig --desired-capacity 2 --min-size 2 --max-size 5 --health-check-type EC2 --health-check-grace-period 300 --termination-policies "Default" --availability-zones ap-southeast-1a ap-southeast-1b --vpc-zone-identifier "subnet-08c15e546a08afc2b,subnet-05a9ad04456fac2d7" --default-cooldown 300
+
+
+ 
+ 1743  aws autoscaling attach-load-balancers --auto-scaling-group-name manjoong-auto-group --load-balancer-name manjoong-lb01
+
+
+ 1747  aws autpsca;ing put-scaling-policy --auto-scaling-group-name manjoong-auto-group --policy-name manjoong-policy --adjustment-type ChangeInCapacity --scaling-adjustment -1 --cooldown 180
+ 1748  aws autpscaling put-scaling-policy --auto-scaling-group-name manjoong-auto-group --policy-name manjoong-policy --adjustment-type ChangeInCapacity --scaling-adjustment -1 --cooldown 180
+ 1749  aws autoscaling put-scaling-policy --auto-scaling-group-name manjoong-auto-group --policy-name manjoong-policy --adjustment-type ChangeInCapacity --scaling-adjustment -1 --cooldown 180
+ 1750  aws cloudwatch put-metric-alarm --alarm-name manjoong-alarm --metric-name CPUUtilization --namespace AWS/EC2 --static Average --period 300--threshold 20 --comparison-operator LessThanOrEqualToThreshold --dimensions Name=AutoScalingGroupName,Value=manjoong-auto-group --evaluation=periods 1 --alarm-action arn:aws:autoscaling:ap-southeast-1:052937454741:scalingPolicy:3ccabfc3-c8e9-46e4-b617-848869470a15:autoScalingGroupName/manjoong-auto-group:policyName/manjoong-policy
+ 1751  aws cloudwatch put-metric-alarm --alarm-name manjoong-alarm --metric-name CPUUtilization --namespace AWS/EC2 --statics Average --period 300--threshold 20 --comparison-operator LessThanOrEqualToThreshold --dimensions Name=AutoScalingGroupName,Value=manjoong-auto-group --evaluation=periods 1 --alarm-action arn:aws:autoscaling:ap-southeast-1:052937454741:scalingPolicy:3ccabfc3-c8e9-46e4-b617-848869470a15:autoScalingGroupName/manjoong-auto-group:policyName/manjoong-policy
+ 1752  aws cloudwatch put-metric-alarm --alarm-name manjoong-alarm --metric-name CPUUtilization --namespace AWS/EC2 --statistics Average --period 300--threshold 20 --comparison-operator LessThanOrEqualToThreshold --dimensions Name=AutoScalingGroupName,Value=manjoong-auto-group --evaluation=periods 1 --alarm-action arn:aws:autoscaling:ap-southeast-1:052937454741:scalingPolicy:3ccabfc3-c8e9-46e4-b617-848869470a15:autoScalingGroupName/manjoong-auto-group:policyName/manjoong-policy
+ 1753  aws cloudwatch put-metric-alarm --alarm-name manjoong-alarm --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300--threshold 20 --comparison-operator LessThanOrEqualToThreshold --dimensions Name=AutoScalingGroupName,Value=manjoong-auto-group --evaluation=periods 1 --alarm-action arn:aws:autoscaling:ap-southeast-1:052937454741:scalingPolicy:3ccabfc3-c8e9-46e4-b617-848869470a15:autoScalingGroupName/manjoong-auto-group:policyName/manjoong-policy
+ 1754  aws cloudwatch put-metric-alarm --alarm-name manjoong-alarm --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300--threshold 20 --comparison-operator LessThanOrEqualToThreshold --dimensions Name=AutoScalingGroupName,Value=manjoong-auto-group --evaluation-periods 1 --alarm-action arn:aws:autoscaling:ap-southeast-1:052937454741:scalingPolicy:3ccabfc3-c8e9-46e4-b617-848869470a15:autoScalingGroupName/manjoong-auto-group:policyName/manjoong-policy
+ 1755  aws cloudwatch put-metric-alarm --alarm-name manjoong-alarm --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300 --threshold 20 --comparison-operator LessThanOrEqualToThreshold --dimensions Name=AutoScalingGroupName,Value=manjoong-auto-group --evaluation-periods 1 --alarm-action arn:aws:autoscaling:ap-southeast-1:052937454741:scalingPolicy:3ccabfc3-c8e9-46e4-b617-848869470a15:autoScalingGroupName/manjoong-auto-group:policyName/manjoong-policy
+ 1756  aws autoscaling put-scaling-policy --auto-scaling-group-name manjoong-auto-group --policy-name manjoong-policy-plus --adjustment-type ChangeInCapacity --scaling-adjustment 1 --cooldown 180
+ 1757  aws cloudwatch put-metric-alarm --alarm-name manjoong-alarm-plus --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300 --threshold 70 --comparison-operator GreaterThanOrEqualToThreshold --dimensions Name=AutoScalingGroupName,Value=manjoong-auto-group --evaluation-periods 1 --alarm-action arn:aws:autoscaling:ap-southeast-1:052937454741:scalingPolicy:b564ff39-bb7f-4a25-9d42-e1cfe1982f85:autoScalingGroupName/manjoong-auto-group:policyName/manjoong-policy-plus
