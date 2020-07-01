@@ -99,4 +99,46 @@ aws elb register-instances-with-load-balancer --load-balancer-name manjoong-lb-0
 
 13. 인스턴스에 PUBLIC IP 연결( aws ec2 associate-address --instance-id i-0cc85c7023ab828d3 --allocation-id eipalloc-050da68ed6add4a79)
 
+07/01
+aws configure
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+aws ec2 modify-vpc-attibute --vpc-id vpc-06bb9dce2d799e09f --enable-dns-hostname
+aws ec2 modify-vpc-attribute --vpc-id vpc-06bb9dce2d799e09f --enable-dns-hostname
+aws ec2 describe-vpcs
+aws ec2 create-subnet --vpc-id vpc-06bb9dce2d799e09f
+aws ec2 create-subnet --vpc-id vpc-06bb9dce2d799e09f --availability-zone ap-southeast-1 --cidr-block 10.0.0.0/24
+aws ec2 create-subnet --vpc-id vpc-06bb9dce2d799e09f --availability-zone ap-southeast-1a --cidr-block 10.0.0.0/24
+aws ec2 create-subnet --vpc-id vpc-06bb9dce2d799e09f --availability-zone ap-southeast-1a --cidr-block 10.0.1.0/24
+ aws ec2 create-subnet --vpc-id vpc-06bb9dce2d799e09f --availability-zone ap-southeast-1b --cidr-block 10.0.2.0/24
+
+aws ec2 create-subnet --vpc-id vpc-06bb9dce2d799e09f --availability-zone ap-southeast-1b --cidr-block 10.0.3.0/24
+
+aws ec2 create-route-table --vpc-id vpc-06bb9dce2d799e09f
+aws ec2 associate-route-table --route-table-id rtb-050f85ad7faf53fd1 --subnet-id subnet-035d5f12020d24c5c
+aws ec2 associate-route-table --route-table-id rtb-050f85ad7faf53fd1 --subnet-id subnet-0093b1bf79b438a57
+aws ec2 associate-route-table --route-table-id rtb-0d603aa29556437e0 --subnet-id subnet-05a9ad04456fac2d7
+aws ec2 associate-route-table --route-table-id rtb-0d603aa29556437e0 --subnet-id subnet-08c15e546a08afc2b
+ 1705  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+aws ec2 create-internet-gateway
+aws ec2 attach-0internet-gateway igw-0019c93a8fda41e1a
+aws ec2 attach-internet-gateway igw-0019c93a8fda41e1a --vpc-id vpc-06bb9dce2d799e09f
+aws ec2 attach-internet-gateway-id igw-0019c93a8fda41e1a --vpc-id vpc-06bb9dce2d799e09f
+aws ec2 attach-internet-gateway --internet-gateway-id igw-0019c93a8fda41e1a --vpc-id vpc-06bb9dce2d799e09f
+ aws ec2 create-route --route-table-id rtb-050f85ad7faf53fd1 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-0019c93a8fda41e1a
+aws ec2 create-nat-gateway
+
+aws ec2 allocate-address
+aws ec2 create-nat-gateway --subnet-id subnet-08c15e546a08afc2b --allocation-id eipalloc-02fc4c4f8fff03d7b
+aws ec2 create-route --route-table-id rtb-0d603aa29556437e0 --destination-cidr-block 0.0.0.0/0 --gateway-id nat-00e840ddb8eaa1a84
+aws ec2 create-nat-gateway --subnet-id subnet-035d5f12020d24c5c --allocation-id eipalloc-02fc4c4f8fff03d7b
+aws ec2 create-route --route-table-id rtb-0d603aa29556437e0 --destination-cidr-block 0.0.0.0/0 --gateway-id nat-07da2b5636f25ffb3
+aws ec2 createw-security-group --group-name manjoong-sg01 --description "For my ec2" --vpc-id vpc-06bb9dce2d799e09f
+aws ec2 create-security-group --group-name manjoong-sg01 --description "For my ec2" --vpc-id vpc-06bb9dce2d799e09f
+aws ec2 authorizew-security-group-ingress --group-id sg-0f2953eb6a1873f2e --protocol tcp --port 22 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-id sg-0f2953eb6a1873f2e --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+
+ aws ec2 create-security-group --group-name manjoong-sg-ELB --description "For my ELB" --vpc-id vpc-06bb9dce2d799e09f
+
+aws ec2 authorize-security-group-ingress --group-id sg-09b282ecbd590ab63 --protocol tcp --port 22 --cidr 0.0.0.0/0
 
